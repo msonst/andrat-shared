@@ -180,8 +180,6 @@ public class Call  implements Serializable{
                 '}';
     }
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
-
     // Method to convert Call object to CSV format
     public String toCSV() {
         return callId + ";" +
