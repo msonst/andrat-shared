@@ -16,11 +16,11 @@ apply from: file("${rootDir}/buildSrc/publishing.gradle")
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     implementation 'com.google.protobuf:protobuf-java:3.21.12'
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

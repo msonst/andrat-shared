@@ -25,18 +25,20 @@ public class GPSData implements Serializable {
     public GPSData() {}
 
     // Constructor with arguments
-    public GPSData(String device, Double latitude, Double longitude) {
+    public GPSData(String device, Long timeMs, Double latitude, Double longitude) {
         this.device = device;
+        this.timeMs=timeMs;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public GPSData(String device, Long elapsedRealtimeNs, Double elapsedRealtimeUncertaintyNs,
+    public GPSData(String device, Long timeMs, Long elapsedRealtimeNs, Double elapsedRealtimeUncertaintyNs,
                    Double latitude, Double longitude, Float horizontalAccuracyMeters, Double altitudeMeters,
                    Double altitudeAccuracyMeters, Float speedMetersPerSecond, Float speedAccuracyMetersPerSecond,
                    Float bearingDegrees, Float bearingAccuracyDegrees, Double mslAltitudeMeters,
                    Float mslAltitudeAccuracyMeters) {
         this.device = device;
+        this.timeMs=timeMs;
         this.elapsedRealtimeNs = elapsedRealtimeNs;
         this.elapsedRealtimeUncertaintyNs = elapsedRealtimeUncertaintyNs;
         this.latitude = latitude;
