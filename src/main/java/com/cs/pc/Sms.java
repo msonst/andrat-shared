@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Sms  implements Serializable{
     private boolean deleted;
     private boolean uploaded;
-    private long callId;
+    private long smsId;
     private long timeMs;
     private String smsSender;
 	private String device;
@@ -16,13 +16,13 @@ public class Sms  implements Serializable{
 		
 	}
     
-    public Sms(String device, boolean deleted, boolean uploaded, long callId, long timeMs, String smsSender, String smsBody,
+    public Sms(String device, boolean deleted, boolean uploaded, long smsId, long timeMs, String smsSender, String smsBody,
 			SmsType smsType) {
 		
 		this.device=device;
 		this.deleted = deleted;
 		this.uploaded = uploaded;
-		this.callId = callId;
+		this.smsId = smsId;
 		this.timeMs = timeMs;
 		this.smsSender = smsSender;
 		this.smsBody = smsBody;
@@ -65,17 +65,17 @@ public class Sms  implements Serializable{
         this.smsType = smsType;
     }
 
-    public long getCallId() {
-        return callId;
+    public long getSmsId() {
+        return smsId;
     }
 
-    public void setCallId(long id) {
-        this.callId = id;
+    public void setSmsId(long id) {
+        this.smsId = id;
     }
 
 
     public String toCSV() {
-        return callId + ";" + UnixTimeConverter.convertUnixTimeToDate(timeMs) + ";" + smsSender + ";" + smsBody.replace("\n", " ").replace(";", ",") + ";" + smsType + ";" + deleted +";" +uploaded;
+        return smsId + ";" + UnixTimeConverter.convertUnixTimeToDate(timeMs) + ";" + smsSender + ";" + smsBody.replace("\n", " ").replace(";", ",") + ";" + smsType + ";" + deleted +";" +uploaded;
     }
 
     public void setDeleted(boolean deleted) {
