@@ -1,8 +1,6 @@
 package com.cs.pc;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 // Class for Call
 public class Call  implements Serializable{
@@ -178,30 +176,6 @@ public class Call  implements Serializable{
                 ", isDeleted='" + isDeleted + '\'' +
                 ", uploaded='" + uploaded + '\'' +
                 '}';
-    }
-
-    // Method to convert Call object to CSV format
-    public String toCSV() {
-        return callId + ";" +
-                escapeCsvField(number) + ";" +
-                escapeCsvField(name) + ";" +
-                type.getValue() + ";" +
-                UnixTimeConverter.convertUnixTimeToDate(date) + ";" +
-                duration + ";" +
-                escapeCsvField(voicemailUri) + ";" +
-                escapeCsvField(formattedNumber) + ";" +
-                escapeCsvField(countryIso) + ";" +
-                (isRead ? "1" : "0") + ";" +
-                escapeCsvField(callTypeContext) + ";" +
-                escapeCsvField(geoLocation) + ";" +
-                (isDeleted ? "1" : "0") + ";" +
-                (uploaded ? "1" : "0");
-    }
-
-    // Helper method to escape fields for CSV format
-    private String escapeCsvField(String value) {
-        if (value == null) return "";
-        return "\"" + value.replace("\"", "\"\"") + "\"";
     }
 
 	public String getDevice() {
