@@ -24,7 +24,7 @@ public class FileStorage {
 	public synchronized String store(TransferObject data) throws IOException {
 		String fileName = System.currentTimeMillis() + "-" + UUID.randomUUID().toString() + ".dat";
 
-		String type = data.getType().toString();
+		String type = ""+data.getType().ordinal();
 
 		// Deriving tmpDir and readyDir relative to mBaseDir
 		Path tmpPath = Path.of(mBaseDir, TMPDIR, type, fileName);
@@ -36,7 +36,7 @@ public class FileStorage {
 		Files.write(tmpPath, toByteArray(data), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
 		// Deriving readyDir relative to mBaseDir
-		Path readyPath = Path.of(mBaseDir, READYDIR, fileName);
+		Path readyPath = Path.of(mBaseDir, READYDIR,type, fileName);
 
 		// Ensure the parent directories exist
 		Files.createDirectories(readyPath.getParent());
@@ -46,9 +46,9 @@ public class FileStorage {
 		return fileName;
 	}
 
-	public synchronized TransferObject load(String fileName) {
+	public synchronized TransferObject load(int type,String fileName) {
 		// Deriving the path to the ready directory
-		Path readyPath = Path.of(mBaseDir, READYDIR, fileName);
+		Path readyPath = Path.of(mBaseDir, READYDIR, ""+type, fileName);
 
 		if (Files.exists(readyPath)) {
 			// Open the file and deserialize the object
@@ -64,8 +64,9 @@ public class FileStorage {
 		return null;
 	}
 
-	public synchronized boolean delete(String fileName) {
-		Path readyPath = Path.of(mBaseDir, READYDIR, fileName);
+	public synchronized boolean delete(int type,String fileName) {
+		// Deriving the path to the ready directory
+		Path readyPath = Path.of(mBaseDir, READYDIR, ""+type, fileName);
 
 		if (Files.exists(readyPath)) {
 			try {

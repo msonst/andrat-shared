@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class TransferObject implements Serializable {
 
 	public enum Type {
-		GPS, SMS, CALL, BT_DEV, GEOFENCE, AUDIO, WHATSAPP, LOG, USER_INPUT, CONTACT, EVT;
+		GPS, SMS, CALL, BT_DEV, GEOFENCE, AUDIO, WHATSAPP, LOG, USER_INPUT, CONTACT, EVT, FILE;
 	}
 
 	private Type mType;
