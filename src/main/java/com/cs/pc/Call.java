@@ -2,7 +2,9 @@ package com.cs.pc;
 
 import java.io.Serializable;
 
-// Class for Call
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Call  implements Serializable{
     private boolean isDeleted;
     private long callId;

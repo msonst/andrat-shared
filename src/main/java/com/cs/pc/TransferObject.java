@@ -4,28 +4,26 @@ import java.io.Serializable;
 
 public class TransferObject implements Serializable {
 
-	public enum Type {
-		GPS, SMS, CALL, BT_DEV, GEOFENCE, AUDIO, WHATSAPP, LOG, USER_INPUT, CONTACT, EVT, FILE;
-	}
+	
 
-	private Type mType;
+	private AndratType mType;
 	private byte[] mData;
 
 	public TransferObject() {
 
 	}
 
-	public TransferObject(Type type, byte[] data) {
+	public TransferObject(AndratType type, byte[] data) {
 		super();
 		mType = type;
 		mData = data;
 	}
 
-	public Type getType() {
+	public AndratType getType() {
 		return mType;
 	}
 
-	public void setType(Type type) {
+	public void setType(AndratType type) {
 		mType = type;
 	}
 

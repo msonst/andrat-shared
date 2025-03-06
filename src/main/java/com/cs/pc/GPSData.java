@@ -1,16 +1,18 @@
 package com.cs.pc;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GPSData implements Serializable {
 
     private long timeMs;
     private String device;
-    private Long elapsedRealtimeNs;
-    private Double elapsedRealtimeUncertaintyNs;
     private Double latitude;
     private Double longitude;
+    private Long elapsedRealtimeNs;
+    private Double elapsedRealtimeUncertaintyNs;
     private Float horizontalAccuracyMeters;
     private Double altitudeMeters;
     private Double altitudeAccuracyMeters;

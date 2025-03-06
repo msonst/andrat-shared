@@ -2,6 +2,9 @@ package com.cs.pc;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Sms  implements Serializable{
     private boolean deleted;
     private boolean uploaded;
